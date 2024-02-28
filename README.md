@@ -4,25 +4,26 @@ GAN to generate images of flowers
 
 # Project structure
 
-flower-gan/
+```flower-gan/
 │
-├── data/                  # Directory for storing the dataset
-│   ├── raw/               # Raw, unprocessed data
-│   └── processed/         # Preprocessed data ready for model training
+├── data/ # Directory for storing the dataset
+│ ├── raw/ # Raw, unprocessed data
+│ └── processed/ # Preprocessed data ready for model training
 │
-├── models/                # Model definitions and architecture
-│   ├── generator.py       # Generator model architecture
-│   └── discriminator.py   # Discriminator model architecture
+├── models/ # Model definitions and architecture
+│ ├── generator.py # Generator model architecture
+│ └── discriminator.py # Discriminator model architecture
 │
-├── utils/                 # Utility scripts for data preprocessing, etc.
-│   ├── dataloader.py      # Script for loading and preprocessing data
-│   └── visualization.py   # Utilities for visualizing images, training progress, etc.
+├── utils/ # Utility scripts for data preprocessing, etc.
+│ ├── dataloader.py # Script for loading and preprocessing data
+│ └── visualization.py # Utilities for visualizing images, training progress, etc.
 │
-├── checkpoints/           # Saved model weights and checkpoints
+├── checkpoints/ # Saved model weights and checkpoints
 │
-├── results/               # Generated images, model outputs, and evaluation metrics
+├── results/ # Generated images, model outputs, and evaluation metrics
 │
-├── train.py               # Main script for training the GAN
-├── evaluate.py            # Script for evaluating the GAN and generating images
+├── train.py # Main script for training the GAN
+├── evaluate.py # Script for evaluating the GAN and generating images
 │
-└── config.py              # Configuration file for model parameters, paths, etc.
+└── config.py # Configuration file for model parameters, paths, etc.
+```
