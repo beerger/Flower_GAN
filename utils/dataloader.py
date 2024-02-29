@@ -25,7 +25,7 @@ class TrainDataModule(pl.LightningDataModule):
 
     def __init__(self, image_dir, batch_size=32):
 
-        super(TrainDataModule, self).__init__()
+        super().__init__()
         self.image_dir = image_dir
         self.batch_size = batch_size
         self.transform = transforms.Compose([
@@ -35,10 +35,8 @@ class TrainDataModule(pl.LightningDataModule):
             transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
         ])
 
-    def setup(self, stage=None):
-        self.dataset = FlowerDataset(image_dir=self.image_dir, transform=self.transform)
-
     def train_dataloader(self):
+        dataset = FlowerDataset(image_dir=self.image_dir, transform=self.transform)
         # DataLoader for training set
-        return DataLoader(self.dataset, batch_size=self.batch_size, shuffle=True)
+        return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
 
