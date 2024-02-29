@@ -1,7 +1,60 @@
 import os
-from PIL import Image
+from PIL import Image, ImageOps
 import numpy as np
 import config
+
+
+def center_crop_and_resize(img, target_size):
+    """
+    Center crops image with size HxH if H < W, WxW if W < H.
+    Then resizes image to target size.
+    
+    Args:
+    - img: Image to be cropped and resized
+    - target_size: Size of image after resizing
+
+    Returns:
+    - Cropped and resizes image
+    """
+    # Determine the size for cropping
+    crop_size = min(img.size)
+    
+    # Calculate cropping box
+    left = (img.width - crop_size) / 2
+    top = (img.height - crop_size) / 2
+    right = (img.width + crop_size) / 2
+    bottom = (img.height + crop_size) / 2
+    
+    # Crop the center of the image
+    img = img.crop((left, top, right, bottom))
+    
+    # Resize the cropped image to the desired output size
+    img = img.resize(target_size, Image.LANCZOS)
+    
+    return img
+
+def resize_and_pad(img, target_size):
+    """
+    Adds padding to shorter side to make image square
+    
+    Args:
+    - img: Image to be cropped and resized
+    - target_size: Size of image after resizing
+
+    Returns:
+    - Resized and padded image
+    """
+    # Resize while preserving aspect ratio
+    img.thumbnail((target_size[0], target_size[1]), Image.LANCZOS)
+    
+    # Padding
+    padding_color = 0  # Example: black padding
+    img = ImageOps.expand(img, border=(0, (target_size[1] - img.size[1]) // 2), fill=padding_color)
+    img = ImageOps.expand(img, border=((target_size[0] - img.size[0]) // 2, 0), fill=padding_color)
+    
+    # Ensure the image is exactly the desired output size
+    img = img.crop((0, 0, target_size[0], target_size[1]))
+    return img
 
 
 def preprocess_images(raw_data_dir, processed_data_dir, target_size, image_format):
@@ -13,10 +66,10 @@ def preprocess_images(raw_data_dir, processed_data_dir, target_size, image_forma
     directory structure of the raw data directory.
 
     Args:
-        raw_data_dir (str): The directory path that contains the raw images.
-        processed_data_dir (str): The directory path where the processed images will be saved.
-        target_size (tuple): A tuple (width, height) representing the target image size.
-        image_format (str): The desired image format for output (e.g., 'RGB').
+        - raw_data_dir (str): The directory path that contains the raw images.
+        - processed_data_dir (str): The directory path where the processed images will be saved.
+        - target_size (tuple): A tuple (width, height) representing the target image size.
+        - image_format (str): The desired image format for output (e.g., 'RGB').
     """
     
     if not os.path.exists(processed_data_dir):
@@ -30,12 +83,9 @@ def preprocess_images(raw_data_dir, processed_data_dir, target_size, image_forma
                 
                 # Open the image
                 with Image.open(file_path) as img:
-                    # Resize the image
-                    img = img.resize(target_size, Image.ANTIALIAS)
-                    # Convert to the desired format, e.g., RGB
+                    img = center_crop_and_resize(img, target_size)
+                    # Convert to the desired format
                     img = img.convert(image_format)
-                    # Normalize pixel values
-                    img = np.asarray(img) / 255.0
                     # Construct the path to save the processed image
                     relative_path = os.path.relpath(file_path, raw_data_dir)
                     processed_path = os.path.join(processed_data_dir, relative_path)
