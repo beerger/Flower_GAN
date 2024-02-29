@@ -16,7 +16,8 @@ GAN to generate images of flowers
 │
 ├── utils/ # Utility scripts for data preprocessing, etc.
 │ ├── dataloader.py # Script for loading and preprocessing data
-│ └── visualization.py # Utilities for visualizing images, training progress, etc.
+│ ├── visualization.py # Utilities for visualizing images, training progress, etc.
+| └── preprocess.py # Script for static preprocessing, resizing, format, normalization
 │
 ├── checkpoints/ # Saved model weights and checkpoints
 │
@@ -25,5 +26,7 @@ GAN to generate images of flowers
 ├── train.py # Main script for training the GAN
 ├── evaluate.py # Script for evaluating the GAN and generating images
 │
-└── config.py # Configuration file for model parameters, paths, etc.
+├── config.py # Configuration file for model parameters, paths, etc.
+|
+└── main.ipynb # Notebook for training and evaluation
 ```
