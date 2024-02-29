@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import random
 
-def visualize_n_images(image_dir, rows=1, cols=5, random=True):
+def visualize_n_images(image_dir, rows=1, cols=5, use_random=True):
     """
     Visualizes n images located in given image directory
     
     Parameters:
     - image_dir: Directory that contains the images.
     - rows, cols: The layout of the subplot grid.
-    - random: If false it uses the first rows * cols \\
+    - use_random: If false it uses the first rows * cols \\
               images located in image_dir.
     """
 
@@ -22,7 +22,7 @@ def visualize_n_images(image_dir, rows=1, cols=5, random=True):
                 file_paths.append(file_path)
 
     num_images = rows * cols
-    if random and len(file_paths) >= num_images:
+    if use_random and len(file_paths) >= num_images:
         # Randomly select `num_images` from the list of file paths
         selected_paths = random.sample(file_paths, num_images)
     else:
