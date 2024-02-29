@@ -2,7 +2,36 @@ import os
 from PIL import Image, ImageOps
 import numpy as np
 import config
+import torchvision.transforms as transforms
+from torchvision.models.detection import fasterrcnn_resnet50_fpn
+import torch
 
+# Load a pre-trained Faster R-CNN model
+model = fasterrcnn_resnet50_fpn(pretrained=True)
+model.eval()  # Set the model to evaluation mode
+
+# Function to preprocess and perform object detection
+def detect_and_crop(img, target_size, threshold=0.5):
+    transform = transforms.Compose([transforms.ToTensor()])
+    img_tensor = transform(img).unsqueeze(0)
+    
+    # Perform object detection
+    with torch.no_grad():
+        prediction = model(img_tensor)
+    
+    # Filter detection results
+    pred_scores = prediction[0]['scores']
+    pred_boxes = prediction[0]['boxes']
+    max_score_idx = pred_scores.argmax()  # Example: taking the box with the highest score
+    print(pred_scores[max_score_idx])
+    if pred_scores[max_score_idx] >= threshold:
+        box = pred_boxes[max_score_idx].numpy().astype(int)
+        cropped_img = img.crop((box[0], box[1], box[2], box[3]))
+        img = cropped_img.resize(target_size, Image.LANCZOS)
+        return img
+    else:
+        print("Hello")
+        return img  # Return the original image if no high-confidence detections
 
 def center_crop_and_resize(img, target_size):
     """
